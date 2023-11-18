@@ -12,6 +12,6 @@ curl -o "/endkind/server.jar" -L "$BASE_URL/versions/$VERSION/builds/$LATEST_BUI
 if [ $? -eq 0 ]; then
     echo "Download Volia Version ($VERSION) Build ($LATEST_BUILD)"
 else
-    echo "Error updating the Volia-Build. Please try again or recreate the container."
+    echo "An error occurred while downloading Folia. Please try again or recreate the container."
     exit 1
 fi
