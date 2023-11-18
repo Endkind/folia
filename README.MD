@@ -54,30 +54,15 @@ These environment variables allow you to tailor your Folia server's configuratio
 ## Additional Information
 
 - [GitHub Repository](https://github.com/Endkind/folia)
+- [Docker Repository](https://hub.docker.com/r/endkind/folia)
 - [Visit our website](https://www.endkind.net) for more information about our projects and services.
 - Connect to our Minecraft server (crossplay) at `mc.endkind.net` and start your adventure!
 
 
-## LICENSE
+## License
 
-MIT License
+This project is licensed under the terms of the [GNU General Public License v3.0](https://choosealicense.com/licenses/gpl-3.0/) License.
 
-Copyright (c) 2023 Endkind Ender <endkind.ender@endkind.net>
+### Other License
 
-Permission is hereby granted, free of charge, to any person obtaining a copy
-of this software and associated documentation files (the "Software"), to deal
-in the Software without restriction, including without limitation the rights
-to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-copies of the Software, and to permit persons to whom the Software is
-furnished to do so, subject to the following conditions:
-
-The above copyright notice and this permission notice shall be included in all
-copies or substantial portions of the Software.
-
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-SOFTWARE.
+This project includes code derived from the [Folia](https://github.com/PaperMC/folia) project.
