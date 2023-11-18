@@ -14,9 +14,9 @@ This command starts a Folia server in detached mode (-d), maps port 25565 from t
 ## Installation and Configuration (Recommended)
 
 ```bash
-docker volume create <servername>
+docker volume create endkind-folia
 
-docker run -it -d -p 25565:25565 --name <servername> -v <servername>:/folia -e MAX_RAM=3G -e MINECRAFT_EULA=true --restart=always endkind/folia:latest
+docker run -it -d -p 25565:25565 --name endkind-folia -v endkind-folia:/folia -e MAX_RAM=3G -e MINECRAFT_EULA=true --restart=always endkind/folia:latest
 ```
 
 
