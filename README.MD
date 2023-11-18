@@ -24,7 +24,7 @@ docker run -it -d -p 25565:25565 --name <servername> -v <servername>:/folia -e M
 
 When deploying your server for production or if you require version stability, consider using specific image versions. For example:
 
-### Folia 1.20.1
+### Folia 1.19.4
 ```bash
 docker run -it -d -p 25565:25565 -e MINECRAFT_EULA=true endkind/folia:1.19.4
 ```
