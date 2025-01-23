@@ -138,41 +138,19 @@ jobs:
       - push
     if: failure()
     steps:
-    - name: Create a GitHub Issue
-      uses: actions/github-script@v6
-      with:
-        script: |
-          const github_context = github; // Kontext-Objekt mit neuem Namen
+      - name: Create a GitHub Issue
+        uses: nashmaniac/create-issue-action@v1
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          labels: worflow-failed
+          title: "❌ CI/CD Pipeline Failed"
+          body: |
+            The CI/CD pipeline failed for the commit: `${{ github.sha }}`.
+            Please investigate the issue and resolve it.
 
-          // Debug-Ausgabe für den Kontext
-          console.log("Debugging GitHub context:", github_context);
+            **Workflow:** ${{ github.workflow }}
+            **Job:** ${{ github.job }}
+            **Run ID:** ${{ github.run_id }}
+            **Repository:** ${{ github.repository }}
 
-          // Fallback-Werte prüfen und setzen
-          const sha = github_context.sha || github_context.payload?.head_commit?.id || "unknown";
-          const workflow = github_context.workflow || "unknown";
-          const job = github_context.job || "unknown";
-          const runId = github_context.runId || "unknown";
-          const owner = github_context.repo?.owner || "unknown";
-          const repo = github_context.repo?.repo || "unknown";
-
-          const issueTitle = `❌ CI/CD Pipeline Failed`;
-          const issueBody = `
-          The CI/CD pipeline failed for the commit: \`${sha}\`.
-          Please investigate the issue and resolve it.
-
-          **Workflow:** ${workflow}
-          **Job:** ${job}
-          **Run ID:** ${runId}
-          **Repository:** ${owner}/${repo}
-
-          View the full logs [here](${github_context.serverUrl}/${owner}/${repo}/actions/runs/${runId}).
-          `;
-
-          const { data: issue } = await github.rest.issues.create({
-            owner: owner,
-            repo: repo,
-            title: issueTitle,
-            body: issueBody,
-          });
-
-          console.log(`Created issue #${issue.number}: ${issue.html_url}`);
+            View the full logs [here](${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}).
