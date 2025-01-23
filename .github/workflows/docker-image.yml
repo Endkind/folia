@@ -142,23 +142,23 @@ jobs:
       uses: actions/github-script@v6
       with:
         script: |
-          const { context } = require('@actions/github');
+          const github = require('@actions/github');
           const issueTitle = `❌ CI/CD Pipeline Failed`;
           const issueBody = `
-          The CI/CD pipeline failed for the commit: \`${context.sha}\`.
+          The CI/CD pipeline failed for the commit: \`${github.context.sha}\`.
           Please investigate the issue and resolve it.
 
-          **Workflow:** ${context.workflow}
-          **Job:** ${context.job}
-          **Run ID:** ${context.runId}
-          **Repository:** ${context.repo.owner}/${context.repo.repo}
+          **Workflow:** ${github.context.workflow}
+          **Job:** ${github.context.job}
+          **Run ID:** ${github.context.runId}
+          **Repository:** ${github.context.repo.owner}/${github.context.repo.repo}
 
-          View the full logs [here](${context.serverUrl}/${context.repo.owner}/${context.repo.repo}/actions/runs/${context.runId}).
+          View the full logs [here](${github.context.serverUrl}/${github.context.repo.owner}/${github.context.repo.repo}/actions/runs/${github.context.runId}).
           `;
-          
+
           const { data: issue } = await github.rest.issues.create({
-            owner: context.repo.owner,
-            repo: context.repo.repo,
+            owner: github.context.repo.owner,
+            repo: github.context.repo.repo,
             title: issueTitle,
             body: issueBody,
           });
