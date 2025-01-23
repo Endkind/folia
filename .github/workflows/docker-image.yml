@@ -59,10 +59,10 @@ jobs:
         # Start the container
         CONTAINER_ID=$(docker run -it -d -p 25565:25565 -e MINECRAFT_EULA=true endkind/folia:$VERSION)
 
-        # Install 'telnet' in the container if missing
-        docker exec $CONTAINER_ID sh -c "apt-get update && apt-get install -y telnet"
+        # Install telnet on the host
+        sudo apt-get update && sudo apt-get install -y telnet
 
-        # Wait for the container to initialize
+        # Wait for the container to initialize and check the port from the host
         MAX_RETRIES=60
         RETRY_COUNT=0
         while [ $RETRY_COUNT -lt $MAX_RETRIES ]; do
@@ -73,9 +73,9 @@ jobs:
           fi
 
           # Check if port 25565 is open
-          TELNET_STATUS=$(echo quit | docker exec -i $CONTAINER_ID telnet localhost 25565 | grep "Connected")
+          TELNET_STATUS=$(echo quit | telnet localhost 25565 | grep "Connected")
           if [ ! -z "$TELNET_STATUS" ]; then
-            echo "Port 25565 is open."
+            echo "Port 25565 is open and accessible from the host."
             break
           fi
 
