@@ -55,6 +55,7 @@ jobs:
       run: |
         # Use the version from the build job output
         VERSION=${{ needs.build.outputs.version }}
+        echo $VERSION
 
         # Start the container
         CONTAINER_ID=$(docker run -it -d -p 25565:25565 -e MINECRAFT_EULA=true endkind/folia:$VERSION)
