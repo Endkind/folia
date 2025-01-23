@@ -59,8 +59,11 @@ jobs:
         # Start the container
         CONTAINER_ID=$(docker run -it -d -p 25565:25565 -e MINECRAFT_EULA=true endkind/folia:$VERSION)
 
+        # Install 'ss' in the container if missing
+        docker exec $CONTAINER_ID sh -c "apt-get update && apt-get install -y iproute2"
+
         # Wait for the container to initialize
-        MAX_RETRIES=30
+        MAX_RETRIES=60
         RETRY_COUNT=0
         while [ $RETRY_COUNT -lt $MAX_RETRIES ]; do
           # Check if the container is running
