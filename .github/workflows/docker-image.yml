@@ -138,19 +138,9 @@ jobs:
       - push
     if: failure()
     steps:
-      - name: Create a GitHub Issue
-        uses: nashmaniac/create-issue-action@v1.1
+      - uses: actions/checkout@v3
+      - uses: JasonEtco/create-an-issue@v2
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          token: ${{ secrets.GITHUB_TOKEN }}
-          labels: worflow-failed
-          title: "❌ CI/CD Pipeline Failed"
-          body: |
-            The CI/CD pipeline failed for the commit: `${{ github.sha }}`.
-            Please investigate the issue and resolve it.
-
-            **Workflow:** ${{ github.workflow }}
-            **Job:** ${{ github.job }}
-            **Run ID:** ${{ github.run_id }}
-            **Repository:** ${{ github.repository }}
-
-            View the full logs [here](${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}).
+          filename: .github/ISSUE_TEMPLATE.md
