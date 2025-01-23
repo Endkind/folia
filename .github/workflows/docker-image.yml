@@ -139,7 +139,7 @@ jobs:
     if: failure()
     steps:
       - name: Create a GitHub Issue
-        uses: nashmaniac/create-issue-action@v1.2
+        uses: nashmaniac/create-issue-action@v1.1
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
           labels: worflow-failed
