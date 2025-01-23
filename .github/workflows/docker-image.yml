@@ -60,7 +60,7 @@ jobs:
         CONTAINER_ID=$(docker run -it -d -p 25565:25565 -e MINECRAFT_EULA=true endkind/folia:$VERSION)
 
         # Install 'ss' in the container if missing
-        docker exec $CONTAINER_ID sh -c "apt-get update && apt-get install -y iproute2"
+        docker exec $CONTAINER_ID sh -c "DEBIAN_FRONTEND=noninteractive apt-get update && apt-get install -y iproute2"
 
         # Wait for the container to initialize
         MAX_RETRIES=60
