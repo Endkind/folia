@@ -1,7 +1,7 @@
 ---
 title: CI/CD Pipeline Failed
-assignees: octocat
-labels: bug
+assignees: endkind
+labels: worflow-failed
 ---
 
 The CI/CD pipeline failed for the commit: `{{ payload.sha }}`.
