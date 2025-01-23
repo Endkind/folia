@@ -9,9 +9,6 @@ jobs:
   build:
     runs-on: ubuntu-latest
 
-    outputs:
-      version: ${{ steps.get_version.outputs.version }}
-
     steps:
     - name: Check out the repository
       uses: actions/checkout@v4
@@ -21,18 +18,15 @@ jobs:
       run: |
         VERSION=${GITHUB_REF##*/}
         VERSION=$(echo $VERSION | sed 's/^v//')
-        echo "::set-output name=version::$VERSION"
-      outputs:
-        version: $VERSION
 
     - name: Log in to Docker Hub
       run: echo "${{ secrets.DOCKER_PASSWORD }}" | docker login -u "${{ secrets.DOCKER_USERNAME }}" --password-stdin
 
     - name: Build the Docker image
-      run: docker build --build-arg FOLIA_VERSION=${{ steps.get_version.outputs.version }} -t endkind/folia:${{ steps.get_version.outputs.version }} .
+      run: docker build --build-arg FOLIA_VERSION=$VERSION -t endkind/folia:$VERSION .
 
     - name: Save Docker image for test job
-      run: docker save endkind/folia:${{ steps.get_version.outputs.version }} > image.tar
+      run: docker save endkind/folia:$VERSION > image.tar
 
     - name: Upload image artifact
       uses: actions/upload-artifact@v4
@@ -50,14 +44,17 @@ jobs:
       with:
         name: docker-image
 
+    - name: Extract version from tag (remove 'v')
+      id: get_version
+      run: |
+        VERSION=${GITHUB_REF##*/}
+        VERSION=$(echo $VERSION | sed 's/^v//')
+
     - name: Load Docker image
       run: docker load < image.tar
 
     - name: Test the Docker image
       run: |
-        # Use the version from the build job output
-        VERSION=${{ needs.build.outputs.version }}
-
         # Start the container
         CONTAINER_ID=$(docker run -it -d -p 25565:25565 -e MINECRAFT_EULA=true endkind/folia:$VERSION)
 
@@ -108,13 +105,14 @@ jobs:
     - name: Check out the repository
       uses: actions/checkout@v4
 
+    - name: Extract version from tag (remove 'v')
+      id: get_version
+      run: |
+        VERSION=${GITHUB_REF##*/}
+        VERSION=$(echo $VERSION | sed 's/^v//')
+
     - name: Log in to Docker Hub
       run: echo "${{ secrets.DOCKER_PASSWORD }}" | docker login -u "${{ secrets.DOCKER_USERNAME }}" --password-stdin
 
     - name: Push the Docker image
-      run: |
-        # Use the version from the build job output
-        VERSION=${{ needs.build.outputs.version }}
-        echo $VERSION  # TEST
-
-        docker push endkind/folia:$VERSION
+      run: docker push endkind/folia:$VERSION
