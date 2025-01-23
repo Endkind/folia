@@ -142,22 +142,35 @@ jobs:
       uses: actions/github-script@v6
       with:
         script: |
+          const github_context = github; // Kontext-Objekt mit neuem Namen
+
+          // Debug-Ausgabe für den Kontext
+          console.log("Debugging GitHub context:", github_context);
+
+          // Fallback-Werte prüfen und setzen
+          const sha = github_context.sha || github_context.payload?.head_commit?.id || "unknown";
+          const workflow = github_context.workflow || "unknown";
+          const job = github_context.job || "unknown";
+          const runId = github_context.runId || "unknown";
+          const owner = github_context.repo?.owner || "unknown";
+          const repo = github_context.repo?.repo || "unknown";
+
           const issueTitle = `❌ CI/CD Pipeline Failed`;
           const issueBody = `
-          The CI/CD pipeline failed for the commit: \`${github.context.sha}\`.
+          The CI/CD pipeline failed for the commit: \`${sha}\`.
           Please investigate the issue and resolve it.
 
-          **Workflow:** ${github.context.workflow}
-          **Job:** ${github.context.job}
-          **Run ID:** ${github.context.runId}
-          **Repository:** ${github.context.repo.owner}/${github.context.repo.repo}
+          **Workflow:** ${workflow}
+          **Job:** ${job}
+          **Run ID:** ${runId}
+          **Repository:** ${owner}/${repo}
 
-          View the full logs [here](${github.context.serverUrl}/${github.context.repo.owner}/${github.context.repo.repo}/actions/runs/${github.context.runId}).
+          View the full logs [here](${github_context.serverUrl}/${owner}/${repo}/actions/runs/${runId}).
           `;
 
           const { data: issue } = await github.rest.issues.create({
-            owner: github.context.repo.owner,
-            repo: github.context.repo.repo,
+            owner: owner,
+            repo: repo,
             title: issueTitle,
             body: issueBody,
           });
