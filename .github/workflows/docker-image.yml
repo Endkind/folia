@@ -109,6 +109,11 @@ jobs:
     - name: Check out the repository
       uses: actions/checkout@v4
 
+    - name: Download image artifact
+      uses: actions/download-artifact@v4
+      with:
+        name: docker-image
+
     - name: Extract version from tag (remove 'v')
       id: get_version
       run: |
