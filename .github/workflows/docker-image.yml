@@ -1,0 +1,27 @@
+name: Docker Image CI
+
+on:
+  push:
+    tags:
+      - 'v*'
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Check out the repository
+      uses: actions/checkout@v4
+
+    - name: Extract version from tag (remove 'v')
+      id: get_version
+      run: echo "VERSION=${GITHUB_REF##*/}" | sed 's/^v//' >> $GITHUB_ENV
+
+    - name: Log in to Docker Hub (optional)
+      run: echo "${{ secrets.DOCKER_PASSWORD }}" | docker login -u "${{ secrets.DOCKER_USERNAME }}" --password-stdin
+
+    - name: Build the Docker image
+      run: docker build --build-arg FOLIA_VERSION=${{ env.VERSION }} -t endkind/folia:${{ env.VERSION }} .
+
+    - name: Push the Docker image
+      run: docker push endkind/folia:${{ env.VERSION }}
