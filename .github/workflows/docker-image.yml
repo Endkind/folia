@@ -15,9 +15,12 @@ jobs:
 
     - name: Extract version from tag (remove 'v')
       id: get_version
-      run: echo "VERSION=${GITHUB_REF##*/}" | sed 's/^v//' >> $GITHUB_ENV
+      run: |
+        VERSION=${GITHUB_REF##*/}
+        VERSION=$(echo $VERSION | sed 's/^v//')
+        echo "VERSION=$VERSION" >> $GITHUB_ENV
 
-    - name: Log in to Docker Hub (optional)
+    - name: Log in to Docker Hub
       run: echo "${{ secrets.DOCKER_PASSWORD }}" | docker login -u "${{ secrets.DOCKER_USERNAME }}" --password-stdin
 
     - name: Build the Docker image
