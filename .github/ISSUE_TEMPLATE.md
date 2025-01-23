@@ -1,5 +1,5 @@
 ---
-title: ❌ CI/CD Pipeline Failed
+title: CI/CD Pipeline Failed
 assignees: octocat
 labels: bug
 ---
