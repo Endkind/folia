@@ -5,10 +5,6 @@ on:
     tags:
       - 'v*'
 
-permissions:
-  contents: read
-  issues: write
-
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -143,22 +139,21 @@ jobs:
     if: failure()
     steps:
       - name: Check out the repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@v3
 
-      - name: Extract failure details
-        id: extract_details
+      - name: Replace placeholders in issue template
         run: |
-          echo "SHA=${{ github.sha }}" >> $GITHUB_ENV
-          echo "WORKFLOW=${{ github.workflow }}" >> $GITHUB_ENV
-          echo "JOB=${{ github.job }}" >> $GITHUB_ENV
-          echo "RUN_ID=${{ github.run_id }}" >> $GITHUB_ENV
-          echo "REPOSITORY=${{ github.repository }}" >> $GITHUB_ENV
-          echo "SERVER_URL=https://github.com" >> $GITHUB_ENV
+          sed -i 's/{{sha}}/${{ github.sha }}/g' .github/ISSUE_TEMPLATE.md
+          sed -i 's/{{tag}}/${GITHUB_REF##*/}/g' .github/ISSUE_TEMPLATE.md
+          sed -i 's/{{workflow_name}}/${{ github.workflow }}/g' .github/ISSUE_TEMPLATE.md
+          sed -i 's/{{job_name}}/${{ github.job }}/g' .github/ISSUE_TEMPLATE.md
+          sed -i 's/{{run_id}}/${{ github.run_id }}/g' .github/ISSUE_TEMPLATE.md
+          sed -i 's|{{logs_url}}|${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}|g' .github/ISSUE_TEMPLATE.md
 
-      - name: Create an issue for the failure
+      - name: Create a GitHub Issue
         uses: JasonEtco/create-an-issue@v2
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           filename: .github/ISSUE_TEMPLATE.md
-          sha: ${{ env.SHA }}
+

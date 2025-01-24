@@ -1,17 +1,18 @@
 ---
 title: ❌ CI/CD Pipeline Failed
 assignees: endkind
-labels: worflow-failed
+labels: workflow-failed
 ---
 
-The CI/CD pipeline failed for the commit: `{{ payload.sha }}` `{{ content.payload.sha }}` `{{ with.sha }}`.
+## ❌ CI/CD Pipeline Failure
 
-**Details:**
-- **Workflow:** {{ content.payload.workflow }}
-- **Job:** {{ content.payload.job }}
-- **Run ID:** {{ content.payload.runId }}
-- **Repository:** {{ repository.full_name }}
+The CI/CD pipeline failed for the following commit:
 
-[View logs here]({{ content.payload.server_url }}/{{ repository.full_name }}/actions/runs/{{ content.payload.runId }}).
+- **Commit SHA**: `{{sha}}`
+- **Tag**: `{{tag}}`
+- **Workflow Name**: `{{workflow_name}}`
+- **Job Name**: `{{job_name}}`
+- **Run ID**: `{{run_id}}`
+- **Repository**: `{{repository}}`
 
-Please investigate the issue and resolve it.
+[🔗 View the logs here]({{logs_url}})
