@@ -163,8 +163,8 @@ jobs:
           filename: .github/ISSUE_TEMPLATE.md
           content: |
             {
-              "payload": {
-                "sha": "${{ env.SHA }}",
+              payload: {
+                sha: "${{ env.SHA }}",
                 "workflow": "${{ env.WORKFLOW }}",
                 "job": "${{ env.JOB }}",
                 "runId": "${{ env.RUN_ID }}",
