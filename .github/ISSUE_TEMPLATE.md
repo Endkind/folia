@@ -1,6 +1,5 @@
 ---
 title: CI/CD Pipeline Failed
-assignees: endkind
 labels: worflow-failed
 ---
 
