@@ -45,7 +45,7 @@ You can customize your Folia server by setting the following environment variabl
 - `MAX_RAM` (default: 1G) - Maximum RAM allocated for the server.
 - `MINECRAFT_EULA` (default: false) - Set to `true` to accept the Minecraft EULA.
 - `JAVA_FLAGS` - Additional Java flags generated with [flags.sh](https://flags.sh/).
-- `PAPERMC_FLAGS` (default: --nojline) - Custom Folia server flags.
+- `FOLIA_FLAGS` (default: --nojline) - Custom Folia server flags.
 - `TZ` (example: Europe/Berlin) - Set the time zone for the server.
 
 These environment variables allow you to tailor your Folia server's configuration to your specific requirements. You can adjust memory allocation, specify custom Java flags, and configure various server settings to suit your needs.
