@@ -4,7 +4,7 @@ assignees: endkind
 labels: worflow-failed
 ---
 
-The CI/CD pipeline failed for the commit: `{{ content.payload.sha }}`.
+The CI/CD pipeline failed for the commit: `{{ SHA }}`.
 
 **Details:**
 - **Workflow:** {{ content.payload.workflow }}
