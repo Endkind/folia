@@ -142,9 +142,11 @@ jobs:
         uses: actions/checkout@v3
 
       - name: Replace placeholders in issue template
+        env:
+          TAG: "${GITHUB_REF##*/}"
         run: |
           sed -i 's/{{sha}}/${{ github.sha }}/g' .github/ISSUE_TEMPLATE.md
-          sed -i 's/{{tag}}/${GITHUB_REF##*/}/g' .github/ISSUE_TEMPLATE.md
+          sed -i 's/{{tag}}/${{ env.TAG }}/g' .github/ISSUE_TEMPLATE.md
           sed -i 's/{{workflow_name}}/${{ github.workflow }}/g' .github/ISSUE_TEMPLATE.md
           sed -i 's/{{job_name}}/${{ github.job }}/g' .github/ISSUE_TEMPLATE.md
           sed -i 's/{{run_id}}/${{ github.run_id }}/g' .github/ISSUE_TEMPLATE.md
