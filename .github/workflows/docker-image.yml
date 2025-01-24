@@ -142,9 +142,36 @@ jobs:
       - push
     if: failure()
     steps:
-      - uses: actions/checkout@v3
-      - uses: JasonEtco/create-an-issue@v2
+      - name: Check out the repository
+        uses: actions/checkout@v4
+
+      - name: Extract failure details
+        id: extract_details
+        run: |
+          echo "SHA=${{ github.sha }}" >> $GITHUB_ENV
+          echo "WORKFLOW=${{ github.workflow }}" >> $GITHUB_ENV
+          echo "JOB=${{ github.job }}" >> $GITHUB_ENV
+          echo "RUN_ID=${{ github.run_id }}" >> $GITHUB_ENV
+          echo "REPOSITORY=${{ github.repository }}" >> $GITHUB_ENV
+          echo "SERVER_URL=https://github.com" >> $GITHUB_ENV
+
+      - name: Create an issue for the failure
+        uses: JasonEtco/create-an-issue@v2
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           filename: .github/ISSUE_TEMPLATE.md
+          content: |
+            {
+              "payload": {
+                "sha": "${{ env.SHA }}",
+                "workflow": "${{ env.WORKFLOW }}",
+                "job": "${{ env.JOB }}",
+                "runId": "${{ env.RUN_ID }}",
+                "server_url": "${{ env.SERVER_URL }}"
+              },
+              "repository": {
+                "full_name": "${{ env.REPOSITORY }}"
+              }
+            }
+
