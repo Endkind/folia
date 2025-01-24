@@ -143,13 +143,15 @@ jobs:
 
       - name: Replace placeholders in issue template
         env:
-          TAG: "${GITHUB_REF##*/}"
           SHA: ${{ github.sha }}
           WORKFLOW_NAME: ${{ github.workflow }}
           JOB_NAME: ${{ github.job }}
           RUN_ID: ${{ github.run_id }}
           LOGS_URL: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
         run: |
+          TAG=${GITHUB_REF##*/}
+          echo "TAG=$TAG" >> $GITHUB_ENV
+
           sed -i "s|{{sha}}|$SHA|g" .github/ISSUE_TEMPLATE.md
           sed -i "s|{{tag}}|$TAG|g" .github/ISSUE_TEMPLATE.md
           sed -i "s|{{workflow_name}}|$WORKFLOW_NAME|g" .github/ISSUE_TEMPLATE.md
