@@ -146,14 +146,18 @@ jobs:
           TAG: "${GITHUB_REF##*/}"
         run: |
           TAG=${GITHUB_REF##*/}
-          echo "TAG=$TAG" >> $GITHUB_ENV
+          SHA=${{ github.sha }}
+          WORKFLOW_NAME=${{ github.workflow }}
+          JOB_NAME=${{ github.job }}
+          RUN_ID=${{ github.run_id }}
+          LOGS_URL=${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
 
-          sed -i 's/{{sha}}/${{ github.sha }}/g' .github/ISSUE_TEMPLATE.md
-          sed -i 's/{{tag}}/${{ env.TAG }}/g' .github/ISSUE_TEMPLATE.md
-          sed -i 's/{{workflow_name}}/${{ github.workflow }}/g' .github/ISSUE_TEMPLATE.md
-          sed -i 's/{{job_name}}/${{ github.job }}/g' .github/ISSUE_TEMPLATE.md
-          sed -i 's/{{run_id}}/${{ github.run_id }}/g' .github/ISSUE_TEMPLATE.md
-          sed -i 's|{{logs_url}}|${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}|g' .github/ISSUE_TEMPLATE.md
+          sed -i "s|{{sha}}|$SHA|g" .github/ISSUE_TEMPLATE.md
+          sed -i "s|{{tag}}|$TAG|g" .github/ISSUE_TEMPLATE.md
+          sed -i "s|{{workflow_name}}|$WORKFLOW_NAME|g" .github/ISSUE_TEMPLATE.md
+          sed -i "s|{{job_name}}|$JOB_NAME|g" .github/ISSUE_TEMPLATE.md
+          sed -i "s|{{run_id}}|$RUN_ID|g" .github/ISSUE_TEMPLATE.md
+          sed -i "s|{{logs_url}}|$LOGS_URL|g" .github/ISSUE_TEMPLATE.md
 
       - name: Create a GitHub Issue
         uses: JasonEtco/create-an-issue@v2
