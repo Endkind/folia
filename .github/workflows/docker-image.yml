@@ -145,6 +145,9 @@ jobs:
         env:
           TAG: "${GITHUB_REF##*/}"
         run: |
+          TAG=${GITHUB_REF##*/}
+          echo "TAG=$TAG" >> $GITHUB_ENV
+
           sed -i 's/{{sha}}/${{ github.sha }}/g' .github/ISSUE_TEMPLATE.md
           sed -i 's/{{tag}}/${{ env.TAG }}/g' .github/ISSUE_TEMPLATE.md
           sed -i 's/{{workflow_name}}/${{ github.workflow }}/g' .github/ISSUE_TEMPLATE.md
