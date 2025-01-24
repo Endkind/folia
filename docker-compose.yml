@@ -1,0 +1,17 @@
+services:
+    folia:
+        stdin_open: true
+        tty: true
+        ports:
+            - 25565:25565
+        container_name: endkind-folia
+        volumes:
+            - endkind-folia:/folia
+        environment:
+            - MAX_RAM=3G
+            - MINECRAFT_EULA=true
+        restart: always
+        image: endkind/folia:latest
+        
+volumes:
+    endkind-folia:
