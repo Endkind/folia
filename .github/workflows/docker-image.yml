@@ -162,5 +162,3 @@ jobs:
         with:
           filename: .github/ISSUE_TEMPLATE.md
           sha: ${{ env.SHA }}
-        content:
-          sha: "Test"
