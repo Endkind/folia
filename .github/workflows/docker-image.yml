@@ -99,9 +99,14 @@ jobs:
           exit 1
         fi
 
-        # Clean up
         docker stop $CONTAINER_ID
-        docker rm $CONTAINER_ID
+        docker logs $CONTAINER_ID > docker.log
+
+    - name: Upload log artifact
+      uses: actions/upload-artifact@v4
+      with:
+        name: docker-log
+        path: docker.log
 
   push:
     runs-on: ubuntu-latest
