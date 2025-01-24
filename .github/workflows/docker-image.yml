@@ -161,17 +161,6 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           filename: .github/ISSUE_TEMPLATE.md
-          content: |
-            {
-              payload: {
-                sha: "${{ env.SHA }}",
-                "workflow": "${{ env.WORKFLOW }}",
-                "job": "${{ env.JOB }}",
-                "runId": "${{ env.RUN_ID }}",
-                "server_url": "${{ env.SERVER_URL }}"
-              },
-              "repository": {
-                "full_name": "${{ env.REPOSITORY }}"
-              }
-            }
-
+          sha: ${{ env.SHA }}
+        content:
+          sha: "Test"
