@@ -28,7 +28,7 @@ When deploying your server for production or if you require version stability, c
 docker run -it -d -p 25565:25565 -e MINECRAFT_EULA=true endkind/folia:1.19.4
 ```
 
-By specifying a version like 1.20.1, you ensure that your server runs a known and tested version of Folia.
+By specifying a version like 1.19.4, you ensure that your server runs a known and tested version of Folia.
 
 ### All Supported Versions
 
