@@ -44,6 +44,9 @@ jobs:
     needs: build
 
     steps:
+    - name: Check out the repository
+      uses: actions/checkout@v4
+
     - name: Download image artifact
       uses: actions/download-artifact@v4
       with:
@@ -59,13 +62,16 @@ jobs:
     - name: Load Docker image
       run: docker load < image.tar
 
+    - name: Prepare Test
+      run: |
+        python -m venv .venv
+        source .venv/bin/activate
+        pip install -r .github/requirements.txt
+
     - name: Test the Docker image
       run: |
         # Start the container
         CONTAINER_ID=$(docker run -it -d -p 25565:25565 -e MINECRAFT_EULA=true endkind/folia:$VERSION)
-
-        # Install telnet on the host
-        sudo apt-get update && sudo apt-get install -y telnet
 
         # Wait for the container to initialize and check the port from the host
         MAX_RETRIES=60
@@ -78,8 +84,7 @@ jobs:
           fi
 
           # Check if port 25565 is open
-          TELNET_STATUS=$(echo quit | telnet localhost 25565 | grep "Connected")
-          if [ ! -z "$TELNET_STATUS" ]; then
+          if .venv/bin/python .github/test.py; then
             echo "Port 25565 is open and accessible from the host."
             break
           fi

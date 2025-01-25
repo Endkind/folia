@@ -13,6 +13,5 @@ The CI/CD pipeline failed for the following commit:
 - **Workflow Name**: `{{workflow_name}}`
 - **Job Name**: `{{job_name}}`
 - **Run ID**: `{{run_id}}`
-- **Repository**: `{{repository}}`
 
 [🔗 View the logs here]({{logs_url}})
