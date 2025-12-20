@@ -42,7 +42,7 @@ By specifying a version like 1.19.4, you ensure that your server runs a known an
 You can customize your Folia server by setting the following environment variables:
 
 - `MIN_RAM` (default: 512M) - Minimum RAM allocated for the server.
-- `MAX_RAM` (default: 1G) - Maximum RAM allocated for the server.
+- `MAX_RAM` (default: 3G) - Maximum RAM allocated for the server.
 - `MINECRAFT_EULA` (default: false) - Set to `true` to accept the Minecraft EULA.
 - `JAVA_FLAGS` - Additional Java flags generated with [flags.sh](https://flags.sh/).
 - `FOLIA_FLAGS` (default: --nojline) - Custom Folia server flags.
