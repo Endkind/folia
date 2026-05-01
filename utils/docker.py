@@ -3,9 +3,9 @@ from pathlib import Path
 from typing import List, Optional, Tuple, Union
 
 import docker
-from docker.errors import APIError, DockerException, ImageNotFound, NotFound
+from docker.errors import APIError, DockerException, ImageNotFound
 from docker.models.containers import Container
-from result import Err, Ok, Result, is_err, is_ok
+from result import Err, Ok, Result
 
 
 class DockerHelper:
