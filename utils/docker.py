@@ -18,9 +18,8 @@ class DockerHelper:
         volumes: Optional[List[Tuple[Union[str, Path], str]]] = None,
         auto_remove: bool = False,
     ) -> Result[Container, str]:
-        client = docker.from_env()
-
         try:
+            client = docker.from_env()
             docker_ports = None
             docker_volumes = None
 
