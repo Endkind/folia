@@ -32,6 +32,9 @@ By specifying a version like 1.19.4, you ensure that your server runs a known an
 
 ### All Supported Versions
 
+The current support status for all versions is also available on the live status page:
+[Folia Versions Overview](https://endkind.github.io/folia/)
+
 - `latest` uses always the newest version
 - `1.21.4`, `1.21.5`, `1.21.6`, `1.21.8`, `1.21.11`
 - `1.20.1`, `1.20.2`, `1.20.4`, `1.20.6`
