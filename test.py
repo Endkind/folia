@@ -96,7 +96,7 @@ def test(tag: str) -> Result[str, str]:
     _cleanup_test_environment(container, path)
 
     if is_err(result):
-        return Err("Minecraft Server is not reachable")
+        return Err(f"Minecraft Server is not reachable: {result.unwrap_err()}")
 
     return Ok(f"Docker image '{image_name}' tested successfully")
 

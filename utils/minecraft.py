@@ -11,7 +11,9 @@ class MinecraftHelper:
         port: int = 25565,
         attempts: int = 5,
         attempt_delay: float = 5.0,
-    ) -> Result[str, None]:
+    ) -> Result[str, Exception]:
+        last_error: Exception | None = None
+
         for attempt in range(attempts):
             try:
                 server = JavaServer.lookup(f"{host}:{port}")
@@ -20,8 +22,12 @@ class MinecraftHelper:
                 version = status.version.name
 
                 return Ok(version)
-            except Exception:
+            except Exception as exc:
+                last_error = exc
                 if attempt < attempts - 1:
                     time.sleep(attempt_delay)
 
-        return Err(None)
+        if last_error is not None:
+            return Err(last_error)
+
+        return Err(RuntimeError("No attempts were made to reach the Minecraft server"))
