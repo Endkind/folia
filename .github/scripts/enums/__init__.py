@@ -1,1 +1,2 @@
 from .papermc_api import PaperMCAPIProject
+from .version_support_status import VersionSupportStatus

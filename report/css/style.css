@@ -1,0 +1,87 @@
+body {
+    background:
+        radial-gradient(circle at 10% -10%, rgba(82, 153, 255, 0.2), transparent 50%),
+        radial-gradient(circle at 90% 10%, rgba(100, 0, 212, 0.2), transparent 45%),
+        linear-gradient(180deg, #f7fafc 0%, #eef3f8 100%);
+}
+
+html.dark body {
+    background:
+        radial-gradient(circle at 8% -8%, rgba(100, 0, 212, 0.2), transparent 55%),
+        radial-gradient(circle at 90% 12%, rgba(59, 130, 246, 0.2), transparent 50%),
+        linear-gradient(180deg, #0a101c 0%, #111b2f 100%);
+}
+
+.grid-overlay {
+    background-image: linear-gradient(rgba(30, 41, 59, 0.05) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(30, 41, 59, 0.05) 1px, transparent 1px);
+    background-size: 22px 22px;
+}
+
+html.dark .grid-overlay {
+    background-image: linear-gradient(rgba(148, 163, 184, 0.08) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(148, 163, 184, 0.08) 1px, transparent 1px);
+}
+
+.datatable-wrapper .datatable-top,
+.datatable-wrapper .datatable-bottom {
+    padding: 0.75rem 1rem;
+    color: #475569;
+}
+
+.datatable-wrapper .datatable-search .datatable-input,
+.datatable-wrapper .datatable-selector {
+    border-radius: 0.65rem;
+    border: 1px solid #cbd5e1;
+    background: #ffffff;
+    color: #1e293b;
+}
+
+.datatable-wrapper .datatable-pagination .datatable-pagination-list-item-link {
+    border-radius: 0.5rem;
+    color: #334155;
+}
+
+html.dark .datatable-wrapper .datatable-top,
+html.dark .datatable-wrapper .datatable-bottom {
+    color: #cbd5e1;
+}
+
+html.dark .datatable-wrapper .datatable-search .datatable-input,
+html.dark .datatable-wrapper .datatable-selector {
+    border-color: #475569;
+    background: #0f172a;
+    color: #e2e8f0;
+}
+
+html.dark .datatable-wrapper .datatable-pagination .datatable-pagination-list-item-link {
+    color: #cbd5e1;
+}
+
+html.dark .datatable-wrapper .datatable-pagination .datatable-pagination-list-item-link:hover,
+html.dark .datatable-wrapper .datatable-pagination .datatable-active .datatable-pagination-list-item-link {
+    background: #1e293b;
+    color: #f8fafc;
+}
+
+html.dark .datatable-wrapper .datatable-sorter::before {
+    border-top-color: #64748b;
+    opacity: 0.25;
+}
+
+html.dark .datatable-wrapper .datatable-sorter::after {
+    border-bottom-color: #64748b;
+    opacity: 0.25;
+}
+
+html.dark .datatable-wrapper .datatable-ascending .datatable-sorter::before {
+    border-top-color: #f8fafc;
+    opacity: 1;
+    filter: drop-shadow(0 0 2px rgba(248, 250, 252, 0.35));
+}
+
+html.dark .datatable-wrapper .datatable-descending .datatable-sorter::after {
+    border-bottom-color: #f8fafc;
+    opacity: 1;
+    filter: drop-shadow(0 0 2px rgba(248, 250, 252, 0.35));
+}

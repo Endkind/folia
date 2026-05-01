@@ -15,6 +15,8 @@ FROM eclipse-temurin:17 AS runtime
 LABEL Author="Endkind Ender <endkind.ender@endkind.net>"
 
 COPY entrypoint.sh /endkind/entrypoint.sh
+RUN chmod +x /endkind/entrypoint.sh
+
 COPY --from=build /endkind/server.jar /endkind/server.jar
 
 WORKDIR /data

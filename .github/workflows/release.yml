@@ -9,6 +9,7 @@ on:
 
 permissions:
   contents: write
+  issues: write
 
 jobs:
   dockerfile-build:
@@ -55,6 +56,11 @@ jobs:
           source .venv/bin/activate
           python build.py
 
+      - name: Run test script
+        run: |
+          source .venv/bin/activate
+          python test.py
+
       - name: Log in to Docker Hub
         run: echo "${{ secrets.DOCKER_PASSWORD }}" | docker login -u "${{ secrets.DOCKER_USERNAME }}" --password-stdin
 
@@ -62,3 +68,30 @@ jobs:
         run: |
           source .venv/bin/activate
           python push.py
+
+  report-release-failure:
+    name: Report failed release workflow
+    needs: dockerfile-build
+    if: ${{ failure() }}
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Install reporter dependencies
+        run: |
+          pip install -r .github/scripts/requirements.txt
+
+      - name: Create issue for failed release workflow
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          REPO: ${{ github.repository }}
+          WORKFLOW_NAME: ${{ github.workflow }}
+          WORKFLOW_EVENT: ${{ github.event_name }}
+          WORKFLOW_REF: ${{ github.ref }}
+          WORKFLOW_SHA: ${{ github.sha }}
+          FAILED_JOB: dockerfile-build
+          WORKFLOW_RUN_URL: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
+        run: |
+          python .github/scripts/report_failed_workflow.py
