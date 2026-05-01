@@ -124,3 +124,6 @@ class DockerHelper:
 
         except DockerException as e:
             return Err(f"Docker error: {e}")
+
+        except Exception as e:
+            return Err(f"Failed to remove Container: {e}")
