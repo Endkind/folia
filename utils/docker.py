@@ -104,6 +104,8 @@ class DockerHelper:
         except DockerException as e:
             return Err(f"Docker error: {e}")
 
+        return Ok(False)
+
     @staticmethod
     def remove(
         container: Union[Container, str], force: bool = False
