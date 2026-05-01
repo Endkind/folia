@@ -1,6 +1,9 @@
 import os
 from typing import List, Tuple
 
+from .docker import DockerHelper
+from .minecraft import MinecraftHelper
+
 
 def _parse_version_key(tag: str) -> Tuple:
     """
@@ -33,7 +36,7 @@ def _parse_version_key(tag: str) -> Tuple:
 def discover_versions() -> List[str]:
     versions = []
     current_dir = os.path.dirname(os.path.abspath(__file__))
-    versions_dir = os.path.join(current_dir, "versions")
+    versions_dir = os.path.join(current_dir, "..", "versions")
 
     for item in os.listdir(versions_dir):
         item_path = os.path.join(versions_dir, item)
