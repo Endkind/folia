@@ -70,7 +70,11 @@ def test(tag: str) -> Result[str, str]:
     else:
         return Err(container.unwrap_err())
 
-    container.start()
+    try:
+        container.start()
+    except Exception as exc:
+        _cleanup_test_environment(container, path)
+        return Err(f"Container failed to start for image '{image_name}': {exc}")
 
     time.sleep(5)
 
