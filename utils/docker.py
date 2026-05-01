@@ -14,7 +14,7 @@ class DockerHelper:
         image_name: str,
         *,
         container_name: Optional[str] = None,
-        ports: List[Tuple[int, int]] = None,
+        ports: Optional[List[Tuple[int, int]]] = None,
         volumes: Optional[List[Tuple[Union[str, Path], str]]] = None,
         auto_remove: bool = False,
     ) -> Result[Container, str]:
