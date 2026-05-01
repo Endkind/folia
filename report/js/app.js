@@ -18,8 +18,8 @@ const STATUS_META = {
 };
 
 const URLS = {
-    readme: "https://github.com/Endkind/papermc/blob/main/versions/{version}/README.md",
-    issues: "https://github.com/Endkind/papermc/issues"
+    readme: "https://github.com/Endkind/folia/blob/main/versions/{version}/README.md",
+    issues: "https://github.com/Endkind/folia/issues"
 };
 
 const STORAGE_KEYS = {
