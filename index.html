@@ -1,0 +1,102 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Folia Versions Overview</title>
+    <meta name="description" content="Overview of all Folia versions in the Endkind Docker repository.">
+    <link rel="stylesheet" href="./css/jetbrains_mono.css">
+    <link rel="stylesheet" href="./css/bootstrap-icons_1.11.3.min.css">
+    <link rel="stylesheet" href="./css/simple-datatables_9.0.3.min.css">
+    <script src="./js/tailwind.js"></script>
+    <script src="./js/tailwind.config.js"></script>
+    <script>
+        (function () {
+            const key = "theme";
+            let theme = null;
+
+            try {
+                theme = localStorage.getItem(key);
+            } catch (error) {
+                theme = null;
+            }
+
+            const prefersDark = window.matchMedia
+                && window.matchMedia("(prefers-color-scheme: dark)").matches;
+            const useDark = theme ? theme === "dark" : prefersDark;
+
+            if (useDark) {
+                document.documentElement.classList.add("dark");
+            }
+        }());
+    </script>
+    <link rel="stylesheet" href="./css/style.css">
+</head>
+<body class="min-h-screen text-slate-800 dark:text-slate-100">
+    <main class="mx-auto max-w-6xl px-4 py-8 sm:px-6 lg:px-8">
+        <section class="grid-overlay rounded-3xl border border-slate-200/80 bg-white/80 p-6 shadow-pane backdrop-blur dark:border-slate-700/90 dark:bg-slate-900/75 md:p-8">
+            <div class="flex flex-col gap-5 md:flex-row md:items-center md:justify-between">
+                <div>
+                    <p class="font-mono text-xs uppercase tracking-[0.22em] text-slate-500 dark:text-slate-400">Endkind Docker Images</p>
+                    <h1 class="mt-2 text-3xl font-bold tracking-tight text-slate-900 dark:text-white sm:text-4xl">Folia Versions Overview</h1>
+                    <p class="mt-3 max-w-2xl text-sm text-slate-600 dark:text-slate-300 sm:text-base">
+                        Current support status for each available version.
+                    </p>
+                </div>
+                <div class="flex flex-wrap gap-3 text-sm">
+                    <a class="inline-flex h-10 w-10 items-center justify-center rounded-xl bg-[#181717] transition hover:bg-[#2a2929]" href="https://github.com/Endkind/folia" target="_blank" rel="noopener noreferrer" aria-label="GitHub repository" title="GitHub repository">
+                        <img src="https://cdn.simpleicons.org/github/fff" alt="GitHub" class="h-5 w-5" loading="lazy" decoding="async">
+                    </a>
+                    <a class="inline-flex h-10 w-10 items-center justify-center rounded-xl bg-[#2496ED] transition hover:bg-[#1d7fca]" href="https://hub.docker.com/r/endkind/folia" target="_blank" rel="noopener noreferrer" aria-label="Docker Hub" title="Docker Hub">
+                        <img src="https://cdn.simpleicons.org/docker/fff" alt="Docker" class="h-5 w-5" loading="lazy" decoding="async">
+                    </a>
+                </div>
+            </div>
+
+            <div id="summary" class="mt-7 grid grid-cols-1 gap-3 sm:grid-cols-3">
+                <article class="rounded-2xl border border-support-border bg-support-bg/50 p-4 dark:border-emerald-400/40 dark:bg-emerald-500/15">
+                    <p class="font-mono text-xs uppercase tracking-widest text-support-fg dark:text-emerald-200">supported</p>
+                    <p id="count-supported" class="mt-1 text-3xl font-bold text-support-fg dark:text-emerald-100">-</p>
+                </article>
+                <article class="rounded-2xl border border-disabled-border bg-disabled-bg/50 p-4 dark:border-amber-300/40 dark:bg-amber-500/15">
+                    <p class="font-mono text-xs uppercase tracking-widest text-disabled-fg dark:text-amber-200">disabled</p>
+                    <p id="count-disabled" class="mt-1 text-3xl font-bold text-disabled-fg dark:text-amber-100">-</p>
+                </article>
+                <article class="rounded-2xl border border-unsupported-border bg-unsupported-bg/50 p-4 dark:border-rose-300/40 dark:bg-rose-500/15">
+                    <p class="font-mono text-xs uppercase tracking-widest text-unsupported-fg dark:text-rose-200">unsupported</p>
+                    <p id="count-unsupported" class="mt-1 text-3xl font-bold text-unsupported-fg dark:text-rose-100">-</p>
+                </article>
+            </div>
+
+            <div class="mt-7 overflow-hidden rounded-2xl border border-slate-200 bg-white dark:border-slate-700 dark:bg-slate-900">
+                <div class="overflow-x-auto">
+                    <table id="versions-table" class="min-w-full divide-y divide-slate-200">
+                        <thead class="bg-slate-50 dark:bg-slate-800/70">
+                            <tr>
+                                <th scope="col" class="px-4 py-3 text-left font-mono text-xs uppercase tracking-[0.15em] text-slate-600 dark:text-slate-300">Version</th>
+                                <th scope="col" class="px-4 py-3 text-left font-mono text-xs uppercase tracking-[0.15em] text-slate-600 dark:text-slate-300">Status</th>
+                                <th scope="col" data-sortable="false" class="px-4 py-3 text-left font-mono text-xs uppercase tracking-[0.15em] text-slate-600 dark:text-slate-300">Links</th>
+                            </tr>
+                        </thead>
+                        <tbody id="version-table" class="divide-y divide-slate-100 bg-white dark:divide-slate-700 dark:bg-slate-900"></tbody>
+                    </table>
+                </div>
+            </div>
+
+            <p id="load-state" class="mt-4 text-sm text-slate-500 dark:text-slate-400">Loading version data...</p>
+        </section>
+    </main>
+
+    <div class="fixed bottom-4 right-4 z-50 flex flex-col items-end gap-3 sm:bottom-6 sm:right-6">
+        <button id="scroll-top" type="button" class="inline-flex h-11 w-11 items-center justify-center rounded-full border border-slate-300 bg-white text-slate-800 shadow-lg transition hover:bg-slate-100 dark:border-slate-600 dark:bg-slate-800 dark:text-slate-100 dark:hover:bg-slate-700" aria-label="Scroll to top" title="Scroll to top">
+            <i class="bi bi-chevron-up" aria-hidden="true"></i>
+        </button>
+        <button id="theme-toggle" type="button" class="inline-flex h-11 w-11 items-center justify-center rounded-full border border-slate-300 bg-white text-slate-800 shadow-lg transition hover:bg-slate-100 dark:border-slate-600 dark:bg-slate-800 dark:text-slate-100 dark:hover:bg-slate-700" aria-live="polite" aria-label="Theme toggle" title="Theme toggle">
+            <i id="theme-icon" class="bi bi-circle-half" aria-hidden="true"></i>
+        </button>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/simple-datatables@9.0.3"></script>
+    <script src="./js/app.js" defer></script>
+</body>
+</html>
