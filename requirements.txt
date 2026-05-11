@@ -16,5 +16,5 @@ python-discovery==1.2.2
 PyYAML==6.0.3
 requests==2.33.1
 result==0.17.0
-urllib3==2.6.3
+urllib3==2.7.0
 virtualenv==21.3.0
