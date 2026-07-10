@@ -38,7 +38,10 @@ def _setup_test_environment(path: Path = TEST_PATH) -> None:
         shutil.rmtree(path, ignore_errors=True)
 
     path.mkdir(parents=True, exist_ok=True)
-    (path / "eula.txt").write_text("eula=true", encoding="utf-8")
+    path.chmod(0o777)
+    eula_file = path / "eula.txt"
+    eula_file.write_text("eula=true", encoding="utf-8")
+    eula_file.chmod(0o666)
 
 
 def _cleanup_test_environment(container: Container, path: Path = TEST_PATH) -> None:
