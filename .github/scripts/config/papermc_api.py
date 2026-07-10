@@ -1,2 +1,2 @@
 class PaperMCAPIConfig:
-    BASE_URL = "https://api.papermc.io/v2/projects/"
+    BASE_URL = "https://fill.papermc.io/v3/projects/"

@@ -6,6 +6,8 @@ import os
 import requests
 from result import Err, Ok, Result, is_err
 
+base_url = "https://fill.papermc.io/v3/projects/folia"
+
 
 def main():
     parser = argparse.ArgumentParser(
@@ -44,14 +46,7 @@ def main():
     else:
         version = args.version
 
-    if args.build == "latest":
-        build_result = get_latest_build(version)
-        if is_err(build_result):
-            print(f"Error: {build_result.unwrap_err()}")
-            exit(1)
-        build = build_result.unwrap()
-    else:
-        build = args.build
+    build = args.build
 
     print(f"Version: {version}")
     print(f"Build: {build}")
@@ -65,10 +60,14 @@ def main():
 def download_folia(
     version: str, build: str, output: str = "server.jar"
 ) -> Result[None, str]:
-    base_url = "https://api.papermc.io/v2/projects/folia"
-    download_url = f"{base_url}/versions/{version}/builds/{build}/downloads/folia-{version}-{build}.jar"
+    download_meta_url = f"{base_url}/versions/{version}/builds/{build}"
 
     try:
+        response = requests.get(download_meta_url)
+        response.raise_for_status()
+        data = response.json()
+        download_url = data["downloads"]["server:default"]["url"]
+
         output_dir = os.path.dirname(output)
         if output_dir:
             os.makedirs(output_dir, exist_ok=True)
@@ -86,34 +85,58 @@ def download_folia(
 
 
 def get_latest_version() -> Result[str, str]:
-    base_url = "https://api.papermc.io/v2/projects/folia"
+    versions = get_all_versions()
 
+    if versions.is_err():
+        return Err(versions.unwrap_err())
+
+    versions = versions.unwrap()
+
+    if len(versions) == 0:
+        return Err("No versions found")
+
+    return Ok(versions[0])
+
+
+def get_all_versions() -> Result[list[str], str]:
     try:
         response = requests.get(base_url)
-        response.raise_for_status()
-        data = response.json()
-        versions = data["versions"]
+    except requests.RequestException as error:
+        return Err(
+            f"Failed to fetch versions for project folia. Request error: {error}"
+        )
 
-        for version in reversed(versions):
-            build_result = get_latest_build(version)
-            if not is_err(build_result):
-                return Ok(version)
-
-        return Err("No version with available builds found")
-    except Exception as e:
-        return Err(f"Error getting latest version: {e}")
-
-
-def get_latest_build(version: str) -> Result[str, str]:
-    base_url = "https://api.papermc.io/v2/projects/folia"
+    if response.status_code != 200:
+        return Err(
+            f"Failed to fetch versions for project folia. Status code: {response.status_code}"
+        )
 
     try:
-        response = requests.get(f"{base_url}/versions/{version}")
-        response.raise_for_status()
-        data = response.json()
-        return Ok(str(data["builds"][-1]))
-    except Exception as e:
-        return Err(f"Error getting latest build for version {version}: {e}")
+        payload = response.json()
+    except ValueError as error:
+        return Err(
+            f"Failed to fetch versions for project folia. Invalid JSON response: {error}"
+        )
+
+    versions_by_release = payload.get("versions")
+    if not isinstance(versions_by_release, dict):
+        return Err(
+            f"Failed to fetch versions for project folia. Invalid response shape: missing or invalid 'versions' object"
+        )
+
+    all_versions = []
+
+    for release, versions in versions_by_release.items():
+        if not isinstance(versions, list) or not all(
+            isinstance(version, str) for version in versions
+        ):
+            return Err(
+                f"Failed to fetch versions for project folia. Invalid versions list for release '{release}'"
+            )
+
+        all_versions.extend(versions)
+
+    return Ok(all_versions)
 
 
 if __name__ == "__main__":
