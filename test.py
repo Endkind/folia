@@ -1,20 +1,16 @@
-import math
 import shutil
 import sys
 import time
 from pathlib import Path
-from typing import Final, List
+from typing import List
 from uuid import UUID, uuid4
 
 from docker.models.containers import Container
 from result import Err, Ok, Result, is_err, is_ok
 
+from config.project import ProjectConfig
+from config.test import TestConfig
 from utils import DockerHelper, MinecraftHelper, discover_versions
-
-TEST_PATH: Final[Path] = Path("/tmp/endkind/test/folia")
-ATTEMPT_RETRY_DELAY: Final[float] = 2.0
-ATTEMPTS: Final[int] = math.ceil(120 / ATTEMPT_RETRY_DELAY)
-CONTAINER_NAME = "endkind-folia-test"
 
 
 def main():
@@ -31,8 +27,8 @@ def main():
         exit(1)
 
 
-def _setup_test_environment(path: Path = TEST_PATH) -> None:
-    DockerHelper.remove(CONTAINER_NAME, force=True)
+def _setup_test_environment(path: Path = TestConfig.TEST_PATH) -> None:
+    DockerHelper.remove(TestConfig.CONTAINER_NAME, force=True)
 
     if path.exists():
         shutil.rmtree(path, ignore_errors=True)
@@ -44,7 +40,9 @@ def _setup_test_environment(path: Path = TEST_PATH) -> None:
     eula_file.chmod(0o666)
 
 
-def _cleanup_test_environment(container: Container, path: Path = TEST_PATH) -> None:
+def _cleanup_test_environment(
+    container: Container, path: Path = TestConfig.TEST_PATH
+) -> None:
     DockerHelper.remove(container, force=True)
 
     shutil.rmtree(path, ignore_errors=True)
@@ -52,17 +50,17 @@ def _cleanup_test_environment(container: Container, path: Path = TEST_PATH) -> N
 
 def test(tag: str) -> Result[str, str]:
     uuid: UUID = uuid4()
-    path = TEST_PATH / str(uuid)
+    path = TestConfig.TEST_PATH / str(uuid)
     while path.exists():
         uuid = uuid4()
-        path = TEST_PATH / str(uuid)
+        path = TestConfig.TEST_PATH / str(uuid)
 
     _setup_test_environment(path)
-    image_name = f"endkind/folia:{tag}"
+    image_name = f"endkind/{ProjectConfig.PROJECT}:{tag}"
 
     container = DockerHelper.create(
         image_name,
-        container_name=CONTAINER_NAME,
+        container_name=TestConfig.CONTAINER_NAME,
         ports=[(25565, 25565)],
         volumes=[(path, "/data")],
         auto_remove=True,
@@ -83,8 +81,8 @@ def test(tag: str) -> Result[str, str]:
 
     if not DockerHelper.is_running(
         container,
-        attempts=ATTEMPTS,
-        attempt_delay=ATTEMPT_RETRY_DELAY,
+        attempts=TestConfig.ATTEMPTS,
+        attempt_delay=TestConfig.ATTEMPT_RETRY_DELAY,
     ).unwrap_or(False):
         _cleanup_test_environment(container, path)
         return Err(f"Container failed to start for image '{image_name}'")
@@ -92,8 +90,8 @@ def test(tag: str) -> Result[str, str]:
     result = MinecraftHelper.is_minecraft_server_reachable(
         "127.0.0.1",
         25565,
-        ATTEMPTS,
-        ATTEMPT_RETRY_DELAY,
+        TestConfig.ATTEMPTS,
+        TestConfig.ATTEMPT_RETRY_DELAY,
     )
 
     _cleanup_test_environment(container, path)
@@ -113,14 +111,14 @@ def test_all(versions: List[str] | None = None) -> Result[str, str]:
 
     print(f"Found {len(versions)} versions:")
     for version in versions:
-        print(f" - folia/{version}")
+        print(f" - {ProjectConfig.PROJECT}:{version}")
 
     print("\nStarting tests...\n")
 
     success_count = 0
 
     for version in versions:
-        print(f"--- Testing folia:{version} ---")
+        print(f"--- Testing {ProjectConfig.PROJECT}:{version} ---")
         result = test(version)
 
         if is_ok(result):
