@@ -13,6 +13,9 @@ categories:
   - title: '🧰 Maintenance'
     label: 'maintenance'
     collapse-after: 5
+  - title: '🆕 Updates'
+    label: 'update'
+    collapse-after: 5
   - title : '⚡ Performance'
     label: 'performance'
     collapse-after: 5
@@ -37,6 +40,7 @@ version-resolver:
     labels:
       - 'bug'
       - 'maintenance'
+      - 'update'
       - 'documentation'
 
 template: |

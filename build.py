@@ -5,6 +5,7 @@ from typing import List
 
 from result import Err, Ok, Result, is_err, is_ok
 
+from config.project import ProjectConfig
 from utils import discover_versions
 
 
@@ -33,7 +34,7 @@ def build(tag: str) -> Result[str, str]:
         Result[str, str]: Ok with success message or Err with error message
     """
     try:
-        image_name = f"endkind/folia:{tag}"
+        image_name = f"endkind/{ProjectConfig.PROJECT}:{tag}"
 
         context_path = f"./versions/{tag}"
 
@@ -67,14 +68,14 @@ def build_all(versions: List[str] = discover_versions()) -> Result[str, str]:
 
     print(f"Found {len(versions)} build configurations:")
     for version in versions:
-        print(f" - folia/{version}")
+        print(f" - {ProjectConfig.PROJECT}:{version}")
 
     print("\nStarting builds...\n")
 
     success_count = 0
 
     for version in versions:
-        print(f"--- Building folia:{version} ---")
+        print(f"--- Building {ProjectConfig.PROJECT}:{version} ---")
         result = build(version)
 
         if is_ok(result):
