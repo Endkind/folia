@@ -1,16 +1,19 @@
 import time
+from typing import Annotated
 
 from mcstatus import JavaServer
+from pydantic import Field, validate_call
 from result import Err, Ok, Result
 
 
 class MinecraftHelper:
     @staticmethod
+    @validate_call
     def is_minecraft_server_reachable(
         host: str,
-        port: int = 25565,
-        attempts: int = 5,
-        attempt_delay: float = 5.0,
+        port: Annotated[int, Field(ge=1, le=65535)] = 25565,
+        attempts: Annotated[int, Field(ge=1)] = 5,
+        attempt_delay: Annotated[float, Field(ge=1.0)] = 5.0,
     ) -> Result[str, str]:
         last_error: Exception | None = None
 
