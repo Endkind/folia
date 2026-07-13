@@ -5,9 +5,12 @@ from mcstatus import JavaServer
 from pydantic import Field, validate_call
 from result import Err, Ok, Result
 
+from .validation import validation_error_to_result
+
 
 class MinecraftHelper:
     @staticmethod
+    @validation_error_to_result
     @validate_call
     def is_minecraft_server_reachable(
         host: str,
