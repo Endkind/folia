@@ -4,7 +4,7 @@ certifi==2026.10.19
 cfgv==3.5.0
 charset-normalizer==3.4.7
 distlib==0.4.0
-dnspython==2.8.0
+dnspython==2.9.2
 docker==7.1.0
 filelock==4.2.1
 identify==2.6.19
